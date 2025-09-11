@@ -1,5 +1,3 @@
-import polars as pl
-import pandas as pd
 
 INITIAL_URL = "https://progenomes.embl.de/data"
 
@@ -98,6 +96,9 @@ def get_url(item: str):
 
 
 def view(target):
+    # These should not be imported at the top level as they are slow to import
+    import polars as pl
+    import pandas as pd
     url, filetype = get_url(target)
     if ".bz2" in filetype:
         return pl.from_pandas(pd.read_table(url))
