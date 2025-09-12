@@ -25,12 +25,6 @@ URL_MAPPING = [
         "filetype": "tsv.gz",
         "headers": False,
     },
-    # {
-    #     "name": "marker-genes",
-    #     "file-prefix": "proGenomes3",
-    #     "filename": "markerGenes",
-    #     "filetype": "tar.gz",
-    # },
     {
         "name": "speci-clustering-data",
         "file-prefix": "proGenomes3",
@@ -52,12 +46,6 @@ URL_MAPPING = [
         "filetype": "tab.bz2",
         "headers": False,
     },
-    # {
-    #     "name": "excluded-genomes",
-    #     "file-prefix": "proGenomes3",
-    #     "filename": "excluded_genomes",
-    #     "filetype": "txt.bz2",
-    # },
     {
         "name": "mge-orfs",
         "file-prefix": "representatives",
@@ -72,12 +60,6 @@ URL_MAPPING = [
         "filetype": "tsv.bz2",
         "headers": True,
     },
-    # {
-    #     "name": "gecco-gene-clusters",
-    #     "file-prefix": "proGenomes3",
-    #     "filename": "gecco_clusters",
-    #     "filetype": "gbk.gz",
-    # },
 ]
 
 
@@ -95,11 +77,10 @@ def process_url(item: str):
 
 
 def view(target):
-    print(locals())
-    # url, filetype = process_url(target)
-    # if "tab.bz2" in filetype:
-    #     return pl.from_pandas(pd.read_table(url))
-    # elif "tsv.bz2" in filetype:
-    #     return pl.from_pandas(pd.read_csv(url, sep="\t", index_col=None), include_index=False)
-    # else:
-    #     return pl.read_csv(url, separator="\t")
+    url, filetype = process_url(target)
+    if "tab.bz2" in filetype:
+        return pl.from_pandas(pd.read_table(url))
+    elif "tsv.bz2" in filetype:
+        return pl.from_pandas(pd.read_csv(url, sep="\t", index_col=None), include_index=False)
+    else:
+        return pl.read_csv(url, separator="\t")
