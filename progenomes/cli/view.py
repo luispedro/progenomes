@@ -1,6 +1,5 @@
 import polars as pl
 import pandas as pd
-import bz2
 
 INITIAL_URL = "https://progenomes.embl.de/data"
 
@@ -83,7 +82,7 @@ URL_MAPPING = [
 
 
 def process_url(item: str):
-    mapping = next(iter(i for i in URL_MAPPING if i["name"] == item), None)
+    mapping = next(iter(i for i in URL_MAPPING if i["name"] == item))
     if mapping["file-prefix"] is None:
         return f"{INITIAL_URL}/{mapping['filename']}.{mapping['filetype']}", mapping[
             "filetype"
@@ -96,8 +95,11 @@ def process_url(item: str):
 
 
 def view(target):
-    url, filetype = process_url(target)
-    if ".bz2" in filetype:
-        return pl.from_pandas(pd.read_table(url))
-    else:
-        return pl.read_csv(url, separator="\t")
+    print(locals())
+    # url, filetype = process_url(target)
+    # if "tab.bz2" in filetype:
+    #     return pl.from_pandas(pd.read_table(url))
+    # elif "tsv.bz2" in filetype:
+    #     return pl.from_pandas(pd.read_csv(url, sep="\t", index_col=None), include_index=False)
+    # else:
+    #     return pl.read_csv(url, separator="\t")
