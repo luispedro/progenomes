@@ -38,9 +38,8 @@ classifiers = [
 dependencies = [
   "polars",
   "pandas",
-  "rich",
-  "joblib",
-  "platformdirs",
+  "tqdm",
+  "pyarrow"
 ]
 
 [project.optional-dependencies]
