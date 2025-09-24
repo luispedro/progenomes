@@ -1,10 +1,11 @@
 from tqdm import tqdm
 import time
 import urllib.request
+from typing import Union
 
-INITIAL_URL = "https://progenomes.embl.de/data"
+GENOME_INITIAL_URL = "https://progenomes.embl.de/data"
 
-URL_MAPPING = [
+GENOME_URL_MAPPING = [
     {
         "name": "representative-genomes",
         "type": "representatives",
@@ -80,19 +81,114 @@ URL_MAPPING = [
 ]
 
 
-def process_url(type: str, target: str):
-    mapping = next(iter(item for item in URL_MAPPING if item["name"] == type), None)
+def process_genome_url(target: str, component: str):
+    mapping = next(iter(item for item in GENOME_URL_MAPPING if item["name"] == target))
     if mapping["order"] == "type.target":
-        return f"{INITIAL_URL}/{mapping['server-prefix']}/{mapping['file-prefix']}.{mapping['type'].replace('-', '_')}.{target}.{mapping['filetype']}"
+        return f"{GENOME_INITIAL_URL}/{mapping['server-prefix']}/{mapping['file-prefix']}.{mapping['type'].replace('-', '_')}.{component}.{mapping['filetype']}"
     else:
-        return f"{INITIAL_URL}/{mapping['server-prefix']}/{mapping['file-prefix']}.{target}.{mapping['type'].replace('-', '_')}.{mapping['filetype']}"
+        return f"{GENOME_INITIAL_URL}/{mapping['server-prefix']}/{mapping['file-prefix']}.{component}.{mapping['type'].replace('-', '_')}.{mapping['filetype']}"
 
-
-def download(type: str, targets: list):
-    pbar = tqdm(targets)
+def download_genomes(target:str, components: list[str]):
+    pbar = tqdm(components)
     for t in pbar:
         pbar.set_description(f"Downloading {t}")
-        url = process_url(type, t)
-        print(url)
-        # urllib.request.urlretrieve(url, url.split("/")[-1])
-        time.sleep(1.0)
+        url = process_genome_url(target, t)
+        urllib.request.urlretrieve(url, url.split("/")[-1])
+
+
+DATASET_INITIAL_URL = "https://progenomes.embl.de/data"
+
+DATASET_URL_MAPPING = [
+    {
+        "name": "habitats-per-isolate",
+        "file-prefix": "proGenomes3",
+        "filename": "habitat_isolates",
+        "filetype": "tab.bz2",
+        "headers": True,
+    },
+    {
+        "name": "habitats-per-speci-cluster",
+        "file-prefix": "proGenomes3",
+        "filename": "habitat_specI",
+        "filetype": "tab.bz2",
+        "headers": True,
+    },
+    {
+        "name": "representatives-per-speci-cluster",
+        "file-prefix": "proGenomes3",
+        "filename": "representatives_for_each_specI",
+        "filetype": "tsv.gz",
+        "headers": False,
+    },
+    {
+        "name": "marker-genes",
+        "file-prefix": "proGenomes3",
+        "filename": "markerGenes",
+        "filetype": "tar.gz",
+    },
+    {
+        "name": "speci-clustering-data",
+        "file-prefix": "proGenomes3",
+        "filename": "specI_clustering",
+        "filetype": "tab.bz2",
+        "headers": False,
+    },
+    {
+        "name": "gtdb-taxonomy",
+        "file-prefix": "proGenomes3",
+        "filename": "specI_lineageGTDB",
+        "filetype": "tab.bz2",
+        "headers": True,
+    },
+    {
+        "name": "highly-important-strains",
+        "file-prefix": None,
+        "filename": "highly_important_strains",
+        "filetype": "tab.bz2",
+        "headers": False,
+    },
+    {
+        "name": "excluded-genomes",
+        "file-prefix": "proGenomes3",
+        "filename": "excluded_genomes",
+        "filetype": "txt.bz2",
+    },
+    {
+        "name": "mge-orfs",
+        "file-prefix": "representatives",
+        "filename": "mge_ORFS",
+        "filetype": "tsv.bz2",
+        "headers": True,
+    },
+    {
+        "name": "mge-annotation",
+        "file-prefix": "representatives",
+        "filename": "mge_annotation",
+        "filetype": "tsv.bz2",
+        "headers": True,
+    },
+    {
+        "name": "gecco-gene-clusters",
+        "file-prefix": "proGenomes3",
+        "filename": "gecco_clusters",
+        "filetype": "gbk.gz",
+    },
+]
+
+
+def process_dataset_url(item: str):
+    mapping = next(iter(i for i in DATASET_URL_MAPPING if i["name"] == item))
+    if mapping["file-prefix"] is None:
+        return f"{DATASET_INITIAL_URL}/{mapping['filename']}.{mapping['filetype']}"
+    else:
+        return f"{DATASET_INITIAL_URL}/{mapping['file-prefix']}_{mapping['filename']}.{mapping['filetype']}"
+
+def download_dataset(target:str):
+    url = process_dataset_url(target)
+    urllib.request.urlretrieve(url, url.split("/")[-1])
+
+def download(type: str, target: str, components: Union[list[str], None]):
+    if type == "genomes":
+        download_genomes(target, components)
+    else: 
+        download_dataset(target)
