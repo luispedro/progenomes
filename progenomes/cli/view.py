@@ -1,6 +1,3 @@
-import polars as pl
-import pandas as pd
-
 INITIAL_URL = "https://progenomes.embl.de/data"
 
 URL_MAPPING = [
@@ -63,21 +60,26 @@ URL_MAPPING = [
 ]
 
 
-def process_url(item: str):
-    mapping = next(iter(i for i in URL_MAPPING if i["name"] == item))
-    if mapping["file-prefix"] is None:
-        return f"{INITIAL_URL}/{mapping['filename']}.{mapping['filetype']}", mapping[
-            "filetype"
-        ]
+def get_url(item: str):
+    for mapping in URL_MAPPING:
+        if mapping["name"] == item:
+            break
     else:
-        return (
-            f"{INITIAL_URL}/{mapping['file-prefix']}_{mapping['filename']}.{mapping['filetype']}",
-            mapping["filetype"],
-        )
+        raise ValueError(f"Item '{item}' not found in URL mapping.")
+    mapping = next(iter(i for i in URL_MAPPING if i["name"] == item), None)
+    if mapping["file-prefix"] is None:
+        path = f"{mapping['filename']}.{mapping['filetype']}"
+    else:
+        path = f"{mapping['file-prefix']}_{mapping['filename']}.{mapping['filetype']}"
+    return (
+        f"{INITIAL_URL}/{path}", mapping["filetype"],
+    )
 
 
 def view(target):
-    url, filetype = process_url(target)
+    import polars as pl
+    import pandas as pd
+    url, filetype = get_url(target)
     if "tab.bz2" in filetype:
         return pl.from_pandas(pd.read_table(url))
     elif "tsv.bz2" in filetype:
