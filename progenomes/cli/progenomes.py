@@ -1,5 +1,5 @@
-from progenomes.cli.download import download
-from progenomes.cli.view import view
+from progenomes.download import download
+from progenomes.view import view
 import argparse
 
 

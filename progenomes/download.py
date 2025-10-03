@@ -1,5 +1,4 @@
 from collections import namedtuple
-from typing import Union
 from tqdm import tqdm
 import urllib.request
 
@@ -50,7 +49,7 @@ GENOME_URL_MAPPING = {
 }
 
 
-def process_genome_url(target: str, component: str):
+def _get_genome_url(target: str, component: str):
     mapping = GENOME_URL_MAPPING[target]
     if mapping.order == "type.target":
         return (
@@ -63,11 +62,13 @@ def process_genome_url(target: str, component: str):
             f"{component}.{mapping.type.replace('-', '_')}.{mapping.filetype}"
         )
 
+
 def download_genomes(target: str, components: list[str]):
+    ''' Download genome files by their target name and components. '''
     pbar = tqdm(components)
     for t in pbar:
         pbar.set_description(f"Downloading {t}")
-        url = process_genome_url(target, t)
+        url = _get_genome_url(target, t)
         urllib.request.urlretrieve(url, url.split("/")[-1])
 
 
@@ -106,7 +107,7 @@ DATASET_URL_MAPPING = {
 }
 
 
-def process_dataset_url(item: str):
+def _get_dataset_url(item: str):
     mapping = DATASET_URL_MAPPING[item]
     if mapping.file_prefix is None:
         return f"{DATASET_INITIAL_URL}/{mapping.filename}.{mapping.filetype}"
@@ -116,12 +117,8 @@ def process_dataset_url(item: str):
             f"{mapping.filetype}"
         )
 
-def download_dataset(target:str):
-    url = process_dataset_url(target)
-    urllib.request.urlretrieve(url, url.split("/")[-1])
 
-def download(type: str, target: str, components: Union[list[str], None]):
-    if type == "genomes":
-        download_genomes(target, components)
-    else: 
-        download_dataset(target)
+def download_dataset(target: str):
+    ''' Download a dataset by its target name. '''
+    url = _get_dataset_url(target)
+    urllib.request.urlretrieve(url, url.split("/")[-1])
