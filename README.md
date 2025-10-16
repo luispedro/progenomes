@@ -1,6 +1,6 @@
-# proGenomes
+# proGenomes-cli
 
-proGenomes is a command-line tool for exploring the proGenomes dataset of bacterial and archaeal genomes.
+proGenomes-cli is a command-line tool for exploring the [proGenomes](https://progenomes.embl.de) dataset of bacterial and archaeal genomes.
 
 If you use this software in a publication please cite:
 
