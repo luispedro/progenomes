@@ -4,7 +4,7 @@ proGenomes-cli is a command-line tool for exploring the [proGenomes](https://pro
 
 If you use this software in a publication please cite:
 
-> Fullam, Anthony; Letunic, Ivica,; Maistrenko, Oleksandr; Castro, Alexandre A; Coelho, Luis Pedro; Grekova, Anastasia ; Schudoma, Christian; Khedkar, Supriya; Robbani, Shahriyar Mahdi; Kuhn, Michael; Schmidt, Thomas S. B; Bork, Peer; Mende, Daniel R. proGenomes4: providing two million accurately and consistently annotated high-quality prokaryotic genomes. *Nucleic Acids Research*. (approved)
+> Fullam, Anthony; Letunic, Ivica,; Maistrenko, Oleksandr; Castro, Alexandre A; Coelho, Luis Pedro; Grekova, Anastasia ; Schudoma, Christian; Khedkar, Supriya; Robbani, Shahriyar Mahdi; Kuhn, Michael; Schmidt, Thomas S. B; Bork, Peer; Mende, Daniel R. **proGenomes4: providing two million accurately and consistently annotated high-quality prokaryotic genomes.** in *Nucleic Acids Research*. (accepted)
 
 ## Installation
 
