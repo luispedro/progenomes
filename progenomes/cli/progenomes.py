@@ -1,4 +1,4 @@
-from progenomes.download import download
+from progenomes.download import download_dataset, download_genomes
 from progenomes.view import view
 import argparse
 
@@ -112,9 +112,10 @@ def main():
                 items_to_download.append("proteins")
             if args.all:
                 items_to_download = ["genes", "contigs", "proteins"]
+            download_genomes(args.target, items_to_download)
         else:
             items_to_download = None
-        download(args.download_target, args.target, items_to_download)
+            download_dataset(args.target)
     elif args.action == "view":
         item_to_view = args.target
         print(view(item_to_view))
