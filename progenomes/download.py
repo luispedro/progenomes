@@ -1,6 +1,7 @@
 from collections import namedtuple
 from tqdm import tqdm
 import urllib.request
+from typing import Union
 
 GENOME_INITIAL_URL = "https://progenomes.embl.de/data"
 
@@ -45,7 +46,7 @@ GENOME_URL_MAPPING = {
     "sediment-mud": UrlData(
         "sediment-mud", "habitats", "representatives", "fasta.gz", "type.target"
     ),
-    "mud": UrlData("mud", "habitats", "representatives", "fasta.gz", "type.target"),
+    "soil": UrlData("soil", "habitats", "representatives", "fasta.gz", "type.target"),
 }
 
 
