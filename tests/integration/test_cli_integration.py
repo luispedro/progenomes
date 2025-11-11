@@ -6,6 +6,7 @@ import http.server
 import socketserver
 import threading
 import time
+import subprocess
 from progenomes.cli import progenomes
 from io import StringIO
 
@@ -37,6 +38,11 @@ class TestCliIntegration(unittest.TestCase):
         # Clean up downloaded files
         if os.path.exists('proGenomes3_habitat_isolates.tab.bz2'):
             os.remove('proGenomes3_habitat_isolates.tab.bz2')
+
+    def test_cli_help_runs_ok(self):
+        result = subprocess.run(['progenomes', '--help'], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0)
+        self.assertIn('usage: progenomes', result.stdout)
 
     @patch('progenomes.download.DATASET_INITIAL_URL', BASE_URL)
     def test_download_dataset_integration(self):
