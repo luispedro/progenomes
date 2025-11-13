@@ -1,17 +1,25 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PyPI version](https://badge.fury.io/py/progenomes.svg)](https://badge.fury.io/py/progenomes) [![Bioconda version](https://anaconda.org/bioconda/progenomes/badges/version.svg)](https://anaconda.org/bioconda/progenomes)
+
 # proGenomes-cli
 
 proGenomes-cli is a command-line tool for exploring the [proGenomes](https://progenomes.embl.de) dataset of bacterial and archaeal genomes.
 
 If you use this software in a publication please cite:
 
-> Fullam, Anthony; Letunic, Ivica,; Maistrenko, Oleksandr; Castro, Alexandre A; Coelho, Luis Pedro; Grekova, Anastasia ; Schudoma, Christian; Khedkar, Supriya; Robbani, Shahriyar Mahdi; Kuhn, Michael; Schmidt, Thomas S. B; Bork, Peer; Mende, Daniel R. **proGenomes4: providing two million accurately and consistently annotated high-quality prokaryotic genomes.** in *Nucleic Acids Research*. (accepted)
+> Fullam, Anthony; Letunic, Ivica,; Maistrenko, Oleksandr; Castro, Alexandre A; Coelho, Luis Pedro; Grekova, Anastasia ; Schudoma, Christian; Khedkar, Supriya; Robbani, Shahriyar Mahdi; Kuhn, Michael; Schmidt, Thomas S. B; Bork, Peer; Mende, Daniel R. **proGenomes4: providing two million accurately and consistently annotated high-quality prokaryotic genomes.** in *Nucleic Acids Research*. (_in press_)
 
 ## Installation
 
-Clone this repository and install using `pip`:
+proGenomes-cli can be installed using `pip`:
 
 ```bash
-pip install .
+pip install progenomes
+```
+
+or using `conda` through the bioconda channel:
+
+```bash
+conda install -c bioconda progenomes
 ```
 
 ## Usage
