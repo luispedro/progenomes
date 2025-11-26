@@ -1,41 +1,36 @@
 from collections import namedtuple
 from tqdm import tqdm
 import urllib.request
-from typing import Union
+import ssl
+
+ssl._create_default_https_context = ssl._create_stdlib_context
+
 
 GENOME_INITIAL_URL = "https://progenomes.embl.de/data"
 
 GenomeUrlData = namedtuple(
-    "UrlData", ["type", "server_prefix", "file_prefix", "filetype", "order"]
+    "UrlData", ["type", "server_prefix", "file_prefix", "filetype"]
 )
 
-DatasetUrlData = namedtuple(
-    "DatasetUrlData", ["file_prefix", "filename", "filetype", "headers"]
-)
+DatasetUrlData = namedtuple("DatasetUrlData", ["file_prefix", "filename", "filetype"])
 
 GENOME_URL_MAPPING = {
     "representative-genomes": GenomeUrlData(
-        "representatives", "repGenomes", "pg4", "fna.gz", "target.type"
+        "representatives", "repGenomes", "pg4", "fna.gz"
     ),
 }
 
 
 def _get_genome_url(target: str, component: str):
     mapping = GENOME_URL_MAPPING[target]
-    if mapping.order == "type.target":
-        return (
-            f"{GENOME_INITIAL_URL}/{mapping.server_prefix}/{mapping.file_prefix}."
-            f"{mapping.type.replace('-', '_')}.{component}.{mapping.filetype}"
-        )
-    else:
-        return (
-            f"{GENOME_INITIAL_URL}/{mapping.server_prefix}/{mapping.file_prefix}_"
-            f"{component}_{mapping.type.replace('-', '_')}.{mapping.filetype}"
-        )
+    return (
+        f"{GENOME_INITIAL_URL}/{mapping.server_prefix}/{mapping.file_prefix}_"
+        f"{component}_{mapping.type.replace('-', '_')}.{mapping.filetype}"
+    )
 
 
 def download_genomes(target: str, components: list[str]):
-    ''' Download genome files by their target name and components. '''
+    """Download genome files by their target name and components."""
     pbar = tqdm(components)
     for t in pbar:
         pbar.set_description(f"Downloading {t}")
@@ -48,18 +43,14 @@ DATASET_INITIAL_URL = "https://progenomes.embl.de/data"
 
 DATASET_URL_MAPPING = {
     "highly-important-strains": DatasetUrlData(
-        "pg4", "highly_important_strains", "tsv.gz", False
+        "pg4", "highly_important_strains", "tsv.gz"
     ),
-    "excluded-genomes": DatasetUrlData(
-        "proGenomes3", "excluded_genomes", "txt.bz2", None
+    "excluded-genomes": DatasetUrlData("pg4", "excluded_genomes", "txt.gz"),
+    "ani-representatives": DatasetUrlData(
+        "pg4", "representatives_for_each_ANI_cluster", "tsv.gz"
     ),
-    "mge-orfs": DatasetUrlData("representatives", "mge_ORFS", "tsv.bz2", True),
-    "mge-annotation": DatasetUrlData(
-        "representatives", "mge_annotation", "tsv.bz2", True
-    ),
-    "gecco-gene-clusters": DatasetUrlData(
-        "proGenomes3", "gecco_clusters", "gbk.gz", None
-    ),
+    "ani-clustering": DatasetUrlData("pg4", "ANI_clustering", "tsv.gz"),
+    "functional-annotations": DatasetUrlData("pg4", "eggnog_representatives", "tsv.gz"),
 }
 
 
@@ -75,6 +66,6 @@ def _get_dataset_url(item: str):
 
 
 def download_dataset(target: str):
-    ''' Download a dataset by its target name. '''
+    """Download a dataset by its target name."""
     url = _get_dataset_url(target)
     urllib.request.urlretrieve(url, url.split("/")[-1])

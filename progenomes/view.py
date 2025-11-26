@@ -1,57 +1,37 @@
 from collections import namedtuple
+import ssl
+
+ssl._create_default_https_context = ssl._create_stdlib_context
 
 INITIAL_URL = "https://progenomes.embl.de/data"
 
-URLMapping = namedtuple("URLMapping", ["file_prefix", "filename", "filetype", "headers"])
+URLMapping = namedtuple("URLMapping", ["file_prefix", "filename", "filetype"])
 
 URL_MAPPING = {
-    "habitats-per-isolate": URLMapping(
-        file_prefix="proGenomes3",
-        filename="habitat_isolates",
-        filetype="tab.bz2",
-        headers=True,
-    ),
-    "habitats-per-speci-cluster": URLMapping(
-        file_prefix="proGenomes3",
-        filename="habitat_specI",
-        filetype="tab.bz2",
-        headers=True,
-    ),
-    "representatives-per-speci-cluster": URLMapping(
-        file_prefix="proGenomes3",
-        filename="representatives_for_each_specI",
-        filetype="tsv.gz",
-        headers=False,
-    ),
-    "speci-clustering-data": URLMapping(
-        file_prefix="proGenomes3",
-        filename="specI_clustering",
-        filetype="tab.bz2",
-        headers=False,
-    ),
-    "gtdb-taxonomy": URLMapping(
-        file_prefix="proGenomes3",
-        filename="specI_lineageGTDB",
-        filetype="tab.bz2",
-        headers=True,
-    ),
     "highly-important-strains": URLMapping(
         file_prefix="pg4",
         filename="highly_important_strains",
         filetype="tsv.gz",
-        headers=False,
     ),
-    "mge-orfs": URLMapping(
-        file_prefix="representatives",
-        filename="mge_ORFS",
-        filetype="tsv.bz2",
-        headers=True,
+    "excluded-genomes": URLMapping(
+        file_prefix="pg4",
+        filename="excluded_genomes",
+        filetype="txt.gz",
     ),
-    "mge-annotation": URLMapping(
-        file_prefix="representatives",
-        filename="mge_annotation",
-        filetype="tsv.bz2",
-        headers=True,
+    "ani-representatives": URLMapping(
+        file_prefix="pg4",
+        filename="representatives_for_each_ANI_cluster",
+        filetype="tsv.gz",
+    ),
+    "ani-clustering": URLMapping(
+        file_prefix="pg4",
+        filename="ANI_clustering",
+        filetype="tsv.gz",
+    ),
+    "functional-annotations": URLMapping(
+        file_prefix="pg4",
+        filename="eggnog_representatives",
+        filetype="tsv.gz",
     ),
 }
 
@@ -61,20 +41,12 @@ def get_url(item: str):
         mapping = URL_MAPPING[item]
     except KeyError as exc:
         raise ValueError(f"Item '{item}' not found in URL mapping.") from exc
-    if mapping.file_prefix is None:
-        path = f"{mapping.filename}.{mapping.filetype}"
-    else:
-        path = f"{mapping.file_prefix}_{mapping.filename}.{mapping.filetype}"
+    path = f"{mapping.file_prefix}_{mapping.filename}.{mapping.filetype}"
     return (f"{INITIAL_URL}/{path}", mapping.filetype)
 
 
 def view(target):
     import polars as pl
-    import pandas as pd
+
     url, filetype = get_url(target)
-    if "tab.bz2" in filetype:
-        return pl.from_pandas(pd.read_table(url))
-    elif "tsv.bz2" in filetype:
-        return pl.from_pandas(pd.read_csv(url, sep="\t", index_col=None), include_index=False)
-    else:
-        return pl.read_csv(url, separator="\t")
+    return pl.read_csv(url, separator="\t", has_header=False)

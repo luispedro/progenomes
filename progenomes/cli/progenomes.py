@@ -21,25 +21,20 @@ def main():
     parser_download = subparsers.add_parser(
         "download", help="download data from an item"
     )
-    subparser_download = parser_download.add_subparsers(help="subsubcommand help", dest="download_target")
-    parser_download_genome = subparser_download.add_parser("genomes", help="download genome set")
+    subparser_download = parser_download.add_subparsers(
+        help="subsubcommand help", dest="download_target"
+    )
+    parser_download_genome = subparser_download.add_parser(
+        "genomes", help="download genome set"
+    )
     parser_download_genome.add_argument(
         dest="target",
         choices=[
             "representative-genomes",
-            "aquatic",
-            "disease-associated",
-            "food-associated",
-            "host-associated",
-            "host-plant-associated",
-            "freshwater",
-            "sediment-mud",
-            "soil",
         ],
         action="store",
         help="""Representative genome set to download. Available options:
-        Representative genomes, Aquatic, Disease associated, Food associated,
-        Freshwater, Host associated, Host plant associated, Sediment mud, Soil.""",
+        Representative genomes.""",
     )
     parser_download_genome.add_argument(
         "-c", "--contigs", dest="contigs", help="Contigs", action="store_true"
@@ -53,46 +48,37 @@ def main():
     parser_download_genome.add_argument(
         "-a", "--all", dest="all", help="All", action="store_true"
     )
-    parser_download_dataset = subparser_download.add_parser("datasets", help="download genome set")
+    parser_download_dataset = subparser_download.add_parser(
+        "datasets", help="download genome set"
+    )
     parser_download_dataset.add_argument(
         dest="target",
         choices=[
-            "habitats-per-isolate",
-            "habitats-per-speci-cluster",
-            "representatives-per-speci-cluster",
-            "marker-genes",
-            "speci-clustering-data",
-            "gtdb-taxonomy",
             "highly-important-strains",
             "excluded-genomes",
-            "mge-orfs",
-            "mge-annotation",
-            "gecco-gene-clusters",
+            "ani-representatives",
+            "ani-clustering",
+            "functional-annotations",
         ],
         action="store",
         help="""Dataset to download. Available options:
-        Habitats per isolate, Habitats per specI cluster, Representatives per specI cluster,
-        Marker genes, SpecI clustering data, GTDB taxonomy, Highly important strains,
-        Excluded genomes, MGE ORFs, MGE annotation, GECCO biosynthetic gene clusters (GenBank records)""",
+        Highly important strains, Excluded genomes, ANI representatives, ANI clustering,
+        Functional annotations for representative genomes.""",
     )
     parser_view = subparsers.add_parser("view", help="view an item")
     parser_view.add_argument(
         dest="target",
         choices=[
-            "habitats-per-isolate",
-            "habitats-per-speci-cluster",
-            "representatives-per-speci-cluster",
-            "speci-clustering-data",
-            "gtdb-taxonomy",
             "highly-important-strains",
-            "mge-orfs",
-            "mge-annotation",
+            "excluded-genomes",
+            "ani-representatives",
+            "ani-clustering",
+            "functional-annotations",
         ],
         action="store",
         help="""Dataset to view. Available options:
-        Habitats per isolate, Habitats per specI cluster, Representatives per specI cluster,
-        SpecI clustering data, GTDB taxonomy, Highly important strains,
-        MGE ORFs, MGE annotation""",
+        Highly important strains, Excluded genomes, ANI representatives, ANI clustering,
+        Functional annotations for representative genomes.""",
     )
 
     args = parser.parse_args()
