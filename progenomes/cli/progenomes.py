@@ -8,15 +8,12 @@ def main():
         description="""
     Interact with the proGenomes[1] database.
 
-    Anthony Fullam, Ivica Letunic, Thomas S B Schmidt, Quinten R Ducarmon,
-    Nicolai Karcher, Supriya Khedkar, Michael Kuhn, Martin Larralde, Oleksandr
-    M Maistrenko, Lukas Malfertheiner, Alessio Milanese, Joao Frederico Matias
-    Rodrigues, Claudia Sanchis-López, Christian Schudoma, Damian Szklarczyk,
-    Shinichi Sunagawa, Georg Zeller, Jaime Huerta-Cepas, Christian von Mering,
-    Peer Bork, Daniel R Mende, proGenomes3: approaching one million accurately
-    and consistently annotated high-quality prokaryotic genomes, Nucleic
-    Acids Research, Volume 51, Issue D1, 6 January 2023, Pages D760–D766,
-    https://doi.org/10.1093/nar/gkac1078
+    [1] - Anthony Fullam, Ivica Letunic, Oleksandr M Maistrenko, Alexandre Areias
+    Castro, Luis Pedro Coelho, Anastasiia Grekova, Christian Schudoma, Supriya
+    Khedkar, Mahdi Robbani, Michael Kuhn, Thomas S B Schmidt, Peer Bork, Daniel
+    R Mende, proGenomes4: providing 2 million accurately and consistently
+    annotated high-quality prokaryotic genomes, Nucleic Acids Research, 2025;,
+    gkaf1208, https://doi.org/10.1093/nar/gkaf1208
     """,
         formatter_class=argparse.RawTextHelpFormatter,
     )
@@ -105,13 +102,13 @@ def main():
             if not args.contigs and not args.genes and not args.proteins:
                 args.all = True
             if args.contigs:
-                items_to_download.append("contigs")
+                items_to_download.append("genomes")
             if args.genes:
                 items_to_download.append("genes")
             if args.proteins:
                 items_to_download.append("proteins")
             if args.all:
-                items_to_download = ["genes", "contigs", "proteins"]
+                items_to_download = ["genes", "genomes", "proteins"]
             download_genomes(args.target, items_to_download)
         else:
             items_to_download = None
