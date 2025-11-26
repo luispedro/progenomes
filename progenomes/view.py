@@ -36,9 +36,9 @@ URL_MAPPING = {
         headers=True,
     ),
     "highly-important-strains": URLMapping(
-        file_prefix=None,
+        file_prefix="pg4",
         filename="highly_important_strains",
-        filetype="tab.bz2",
+        filetype="tsv.gz",
         headers=False,
     ),
     "mge-orfs": URLMapping(
